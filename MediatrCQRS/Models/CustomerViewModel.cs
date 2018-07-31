@@ -1,8 +1,6 @@
-﻿using MediatR;
-
-namespace MediatrCQRS.Models
+﻿namespace MediatrCQRS.Models
 {
-    public class Customer
+    public class CustomerViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

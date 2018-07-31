@@ -6,29 +6,29 @@ using MediatrCQRS.Data;
 using MediatrCQRS.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MediatR;
 
 namespace MediatrCQRS.Pages.Customers
 {
     public class AddModel : PageModel
     {
-        public readonly AppDbContext _context;
 
+        public IMediator _mediator;
         public Customer Customer { get; set; }
 
-        public AddModel(AppDbContext context)
+        public AddModel(AppDbContext context, IMediator mediator)
         {
-            _context = context;
+            _mediator = mediator;
         }
 
-        public async Task<IActionResult> OnPostAsync(Customer Customer)
+        public async Task<IActionResult> OnPostAsync(CreateCustomerCommand Customer)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Customers.Add(Customer);
-           await _context.SaveChangesAsync();
+            await _mediator.Send(Customer);            
 
             return RedirectToPage("./Index");
         }
