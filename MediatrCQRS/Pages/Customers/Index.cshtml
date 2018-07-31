@@ -1,0 +1,32 @@
+﻿@page
+@model MediatrCQRS.Pages.Customers.IndexModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Customers</h2>
+
+
+<form method="post">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in Model.Customers)
+            {
+                <tr>
+                    <td>@customer.Id</td>
+                    <td>@customer.Name</td>
+                    <td>
+                        <button type="submit" asp-page-handler="delete" asp-route-id="@customer.Id">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a asp-page="./add">Create customer</a>
+</form>

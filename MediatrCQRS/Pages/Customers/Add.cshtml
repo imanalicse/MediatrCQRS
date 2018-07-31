@@ -1,0 +1,16 @@
+﻿@page
+@model MediatrCQRS.Pages.Customers.AddModel
+@{
+    ViewData["Title"] = "Add";
+}
+
+<h2>Add Customer</h2>
+
+<form method="post">
+    @*<div asp-validation-summary="All"></div>*@
+    <div>Name: <input asp-for="Customer.Name" /></div>
+    <span asp-validation-for="Customer.Name"></span>
+    <div>
+        <input type="submit" />
+    </div>
+</form>
