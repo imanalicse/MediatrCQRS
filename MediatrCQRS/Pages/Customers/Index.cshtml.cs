@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
+using MediatrCQRS.Commands;
 using MediatrCQRS.Data;
 using MediatrCQRS.Models;
 using MediatrCQRS.Queries;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 
 namespace MediatrCQRS.Pages.Customers
 {
@@ -28,15 +28,11 @@ namespace MediatrCQRS.Pages.Customers
             Customers = await _mediator.Send(query);
         }
 
-        public async Task<IActionResult> OnPostDeleteAsync(int id)
+        public async Task<IActionResult> OnPostDeleteAsync(int id, DeleteCusotmerCommand command)
         {
-            var customer = await _context.Customers.FindAsync(id);
-            if(customer != null)
-            {
-                _context.Customers.Remove(customer);
-               await _context.SaveChangesAsync();
-            }
-
+            command.Id = id;
+            var isDeleted = await _mediator.Send(command);
+            
             return RedirectToPage();
         }
     }

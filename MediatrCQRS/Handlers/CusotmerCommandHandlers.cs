@@ -7,7 +7,9 @@ using MediatrCQRS.Models;
 
 namespace MediatrCQRS.Handlers
 {
-    public class CusotmerCommandHandlers : IRequestHandler<CreateCustomerCommand, CustomerViewModel>
+    public class CusotmerCommandHandlers : 
+        IRequestHandler<CreateCustomerCommand, CustomerViewModel>,
+        IRequestHandler<DeleteCusotmerCommand, bool>
     {
         private readonly AppDbContext _context;
 
@@ -28,6 +30,20 @@ namespace MediatrCQRS.Handlers
             _context.SaveChangesAsync();
 
             return Task.FromResult(default(CustomerViewModel));
+        }
+
+        public Task<bool> Handle(DeleteCusotmerCommand request, CancellationToken cancellationToken)
+        {
+            var customer = _context.Customers.Find(request.Id);
+           
+            if (customer != null)
+            {
+                _context.Customers.Remove(customer);
+                _context.SaveChangesAsync();
+                return Task.FromResult(true);
+            }
+
+            return Task.FromResult(false);
         }
     }
 }
