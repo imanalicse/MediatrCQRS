@@ -1,0 +1,22 @@
+﻿@page
+@model MediatrCQRS.Pages.Customers.EditModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit Customer - @Model.Customer.Id</h2>
+
+<form method="post">
+    <div asp-validation-summary="All"></div>
+    <input asp-for="Customer.Id" type="hidden" />
+    <div>
+        <label asp-for="Customer.Name" />
+        <div>
+            <input asp-for="Customer.Name" />
+            <span asp-validation-for="Customer.Name"></span>
+        </div>
+    </div>
+    <div>
+        <input type="submit" />
+    </div>
+</form>
