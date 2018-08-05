@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MediatrCQRS.Data;
+﻿using System.Threading.Tasks;
 using MediatrCQRS.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MediatR;
+using MediatrCQRS.Commands;
 
 namespace MediatrCQRS.Pages.Customers
 {
@@ -16,7 +13,7 @@ namespace MediatrCQRS.Pages.Customers
         public IMediator _mediator;
         public Customer Customer { get; set; }
 
-        public AddModel(AppDbContext context, IMediator mediator)
+        public AddModel(IMediator mediator)
         {
             _mediator = mediator;
         }

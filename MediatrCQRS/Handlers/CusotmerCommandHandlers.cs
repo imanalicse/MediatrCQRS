@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using MediatrCQRS.Commands;
 using MediatrCQRS.Data;
 using MediatrCQRS.Models;
 

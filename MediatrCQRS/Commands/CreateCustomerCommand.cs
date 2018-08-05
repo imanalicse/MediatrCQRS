@@ -1,6 +1,7 @@
 ﻿using MediatR;
+using MediatrCQRS.Models;
 
-namespace MediatrCQRS.Models
+namespace MediatrCQRS.Commands
 {
     public class CreateCustomerCommand : IRequest<CustomerViewModel>
     {        
