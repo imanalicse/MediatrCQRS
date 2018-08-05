@@ -12,14 +12,13 @@ namespace MediatrCQRS.Pages.Customers
 {
     public class IndexModel : PageModel
     {
-        private readonly AppDbContext _context;
+        
         private readonly IMediator _mediator;
 
         public IEnumerable<CustomerViewModel> Customers { get; set; }
 
-        public IndexModel(AppDbContext context, IMediator mediator)
-        {
-            _context = context;
+        public IndexModel(IMediator mediator)
+        {            
             _mediator = mediator;
         }
 
