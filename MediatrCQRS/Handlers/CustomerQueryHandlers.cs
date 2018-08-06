@@ -11,10 +11,11 @@ using System.Threading.Tasks;
 namespace MediatrCQRS.Handlers
 {
     public class CustomerQueryHandlers :
-        IRequestHandler<GetCustomerQuery, IEnumerable<CustomerViewModel>>
+        IRequestHandler<GetCustomerQuery, IEnumerable<CustomerViewModel>>,
+        IRequestHandler<GetCustomerByIdQuery, Customer>
     {
         private readonly AppDbContext _context;
-       
+
         public CustomerQueryHandlers(AppDbContext context)
         {
             _context = context;
@@ -36,6 +37,18 @@ namespace MediatrCQRS.Handlers
             }
 
             return Task.FromResult(Enumerable.Empty<CustomerViewModel>());
+        }
+
+        public Task<Customer> Handle(GetCustomerByIdQuery request, CancellationToken cancellationToken)
+        {
+
+            var entity = _context.Customers.Find(request.Id);
+            if (entity != null)
+            {                
+                return Task.FromResult(entity);
+            }
+
+            return Task.FromResult(default(Customer));
         }
     }
 }

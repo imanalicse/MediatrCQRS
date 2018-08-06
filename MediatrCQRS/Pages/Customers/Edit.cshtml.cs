@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MediatR;
 using MediatrCQRS.Data;
 using MediatrCQRS.Models;
+using MediatrCQRS.Queries;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -13,18 +15,22 @@ namespace MediatrCQRS.Pages.Customers
     public class EditModel : PageModel
     {
         private readonly AppDbContext _context;
+        private readonly IMediator _mediator;
 
         [BindProperty]
         public Customer Customer { get; set; }
 
-        public EditModel(AppDbContext context)
+        public EditModel(AppDbContext context, IMediator mediator)
         {
             _context = context;
+            _mediator = mediator;
         }
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            Customer = await _context.Customers.FindAsync(id);            
+            var query = new GetCustomerByIdQuery { Id = id };
+            Customer = await _mediator.Send(query);
+
             if (Customer == null)
             {
                 return RedirectToPage("./Index");
