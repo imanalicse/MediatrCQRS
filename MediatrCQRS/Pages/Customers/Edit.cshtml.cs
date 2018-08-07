@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using MediatrCQRS.Commands;
 using MediatrCQRS.Data;
 using MediatrCQRS.Models;
 using MediatrCQRS.Queries;
@@ -45,18 +46,21 @@ namespace MediatrCQRS.Pages.Customers
                 return Page();
             }
 
-            _context.Attach(Customer).State = EntityState.Modified;
-
-            try
+            UpdateCustomerCommand cust = new UpdateCustomerCommand
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException e)
-            {
-                throw new Exception($"Customer {Customer.Id} not found", e);
-            }
+                Id = Customer.Id,
+                Name = Customer.Name
+            };
 
-            return RedirectToPage("./Index");
+            var isUpdated = await _mediator.Send(cust);
+
+            if(isUpdated)
+            {
+                return RedirectToPage("./Index");
+            }else
+            {
+                return Page();
+            }           
         }
 
     }

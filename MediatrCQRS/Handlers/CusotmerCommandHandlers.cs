@@ -4,12 +4,14 @@ using MediatR;
 using MediatrCQRS.Commands;
 using MediatrCQRS.Data;
 using MediatrCQRS.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MediatrCQRS.Handlers
 {
-    public class CusotmerCommandHandlers : 
+    public class CusotmerCommandHandlers :
         IRequestHandler<CreateCustomerCommand, CustomerViewModel>,
-        IRequestHandler<DeleteCusotmerCommand, bool>
+        IRequestHandler<DeleteCusotmerCommand, bool>,
+        IRequestHandler<UpdateCustomerCommand, bool>
     {
         private readonly AppDbContext _context;
 
@@ -22,7 +24,7 @@ namespace MediatrCQRS.Handlers
         {
 
             Customer entity = new Customer
-            {               
+            {
                 Name = request.Name
             };
 
@@ -35,7 +37,7 @@ namespace MediatrCQRS.Handlers
         public Task<bool> Handle(DeleteCusotmerCommand request, CancellationToken cancellationToken)
         {
             var customer = _context.Customers.Find(request.Id);
-           
+
             if (customer != null)
             {
                 _context.Customers.Remove(customer);
@@ -44,6 +46,28 @@ namespace MediatrCQRS.Handlers
             }
 
             return Task.FromResult(false);
+        }
+
+        public Task<bool> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
+        {
+            Customer newCustomer = new Customer
+            {
+                Id = request.Id,
+                Name = request.Name
+            };
+
+            _context.Attach(newCustomer).State = EntityState.Modified;
+
+            try
+            {
+                _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException e)
+            {
+                return Task.FromResult(false);
+            }
+
+            return Task.FromResult(true);
         }
     }
 }
